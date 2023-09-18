@@ -3,23 +3,27 @@ import { ParsedResult } from "../../types";
 export const combineBalances = (
   parsedResults: ParsedResult[]
 ): ParsedResult[] => {
-  const combinedResults: { [address: string]: number } = {};
+  const combinedResults: {
+    [address: string]: { amount: number; line: number };
+  } = {};
 
   for (const entry of parsedResults) {
     if (!combinedResults[entry.address]) {
-      combinedResults[entry.address] = parseFloat(entry.amount);
+      combinedResults[entry.address] = {
+        amount: parseFloat(entry.amount),
+        line: entry.line_number,
+      };
     } else {
-      combinedResults[entry.address] += parseFloat(entry.amount);
+      combinedResults[entry.address].amount += parseFloat(entry.amount);
     }
   }
 
-  // Convert the combined results back to the ParsedResult format
   const results: ParsedResult[] = [];
-  for (const [address, amount] of Object.entries(combinedResults)) {
+  for (const [address, details] of Object.entries(combinedResults)) {
     results.push({
-      line_number: -1, // Line number will not be accurate after combining balances
+      line_number: details.line,
       address: address,
-      amount: amount.toString(),
+      amount: details.amount.toString(),
     });
   }
 

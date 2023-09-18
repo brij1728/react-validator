@@ -28,5 +28,3 @@ export const ReactEditor: React.FC<ReactEditorProps> = ({ code, setCode }) => {
     />
   );
 };
-
-export default ReactEditor;

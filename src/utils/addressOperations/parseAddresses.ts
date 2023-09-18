@@ -6,50 +6,48 @@ export const parseAddresses = (
   parsed: ParsedResult[];
   errors: ErrorResult;
 } => {
-  const addressPattern = /(0x[a-fA-F0-9]{40})/;
-  const amountPattern = /(\d+\.\d+)/;
-  const lines = input.split("\n").filter((line) => line.trim() !== ""); // Ignore empty lines
+  const addressPattern = /(0x[a-fA-F0-9]{40})/i; // Made it case-insensitive
+  const amountPattern = /(\b\d+(\.\d+)?\b)/g;
 
+  const lines = input.split("\n").filter((line) => line.trim() !== "");
   const parsedResults: ParsedResult[] = [];
   const errorResults: ErrorResult = {};
 
   lines.forEach((line, idx) => {
     const lineNumber = idx + 1;
-
-    let hasError = false;
-
     const addressMatch = addressPattern.exec(line);
-    const amountMatch = amountPattern.exec(line);
+    const amountMatches = Array.from(line.matchAll(amountPattern));
+    const amountMatch = amountMatches.length
+      ? amountMatches[amountMatches.length - 1]
+      : null;
 
-    console.log(`addressMatch: ${addressMatch}`);
-    console.log(`amountMatch: ${amountMatch}`);
+    // If neither an address nor an amount is found, log both errors
+    if (!addressMatch && !amountMatch) {
+      errorResults[lineNumber] = ["wrong address", "wrong amount"];
+      return;
+    }
 
+    // Check for missing address
     if (!addressMatch) {
-      if (!errorResults[lineNumber]) {
-        errorResults[lineNumber] = [];
-      }
+      errorResults[lineNumber] = errorResults[lineNumber] || [];
       errorResults[lineNumber].push("wrong address");
-      hasError = true;
     }
 
+    // Check for missing amount
     if (!amountMatch) {
-      if (!errorResults[lineNumber]) {
-        errorResults[lineNumber] = [];
-      }
+      errorResults[lineNumber] = errorResults[lineNumber] || [];
       errorResults[lineNumber].push("wrong amount");
-      hasError = true;
     }
 
-    if (!hasError) {
+    if (addressMatch && amountMatch) {
       parsedResults.push({
         line_number: lineNumber,
-        address: addressMatch![1],
-        amount: amountMatch![1],
+        address: addressMatch[1],
+        amount: amountMatch[1],
       });
     }
   });
 
-  console.log(parsedResults);
   return {
     parsed: parsedResults,
     errors: errorResults,
