@@ -11,7 +11,7 @@ export const combineBalances = (
     if (!combinedResults[entry.address]) {
       combinedResults[entry.address] = {
         amount: entry.amount,
-        line: entry.line_number,
+        line: entry.lineNumber,
       };
     } else {
       combinedResults[entry.address].amount += entry.amount;
@@ -21,7 +21,7 @@ export const combineBalances = (
   const results: ParsedResult[] = [];
   for (const [address, details] of Object.entries(combinedResults)) {
     results.push({
-      line_number: details.line,
+      lineNumber: details.line,
       address: address,
       amount: details.amount,
     });

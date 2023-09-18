@@ -1,9 +1,13 @@
 export type ParsedResult = {
-  line_number: number;
+  lineNumber: number;
   address: string;
   amount: number;
 };
 
 export type ErrorResult = {
   [lineNumber: number]: string[];
+};
+
+export type DuplicateAddressWarning = {
+  [address: string]: number[];
 };

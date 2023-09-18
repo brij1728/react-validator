@@ -1,50 +1,94 @@
-import { ErrorResult, ParsedResult } from "../../types";
+import {
+  ErrorResult,
+  ParsedResult,
+  DuplicateAddressWarning,
+} from "../../types";
 import { combineBalances, keepFirstOne, parseAddresses } from "../../utils";
 
 import { ReactEditor } from "../../components";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export const Home = () => {
   const sampleInput = `
 0x1234567890123456789012345678901234567890 123.45
-0xabcdefabcdefabcdefabcdefabcdefabcdefabcdef00 99
+0xabcdefabcdefabcdefabcdefabcdefabcdffff00 99
 `.trim();
 
   const [text, setText] = useState(sampleInput);
-  const [parsedResults, setParsedResults] = useState<ParsedResult[]>([]);
-  const [errors, setErrors] = useState<ErrorResult>({});
+  const [parsedData, setParsedData] = useState<ParsedResult[]>([]);
+  const [errors, setErrors] = useState<null | ErrorResult>(null);
+  const [duplicateWarnings, setDuplicateWarnings] =
+    useState<null | DuplicateAddressWarning>(null);
 
-  const processUserInput = () => {
+  const [isValid, setIsValid] = useState(false);
+
+  const processUserInput = useCallback(() => {
     // reset state
-    setParsedResults([]);
-    setErrors({});
+    setParsedData([]);
+    setErrors(null);
+    setDuplicateWarnings(null);
+    setIsValid(false);
 
-    const { parsed, errors } = parseAddresses(text);
+    const { parsed, errors, duplicateWarnings } = parseAddresses(text);
 
-    if (Object.keys(errors).length === 0) {
-      // If there are duplicate addresses, first combine their balances
-      const combinedResults = combineBalances(parsed);
+    setParsedData(parsed);
 
-      // Then, ensure only the first occurrence is kept
-      const deduplicatedResults = keepFirstOne(combinedResults);
-
-      setParsedResults(deduplicatedResults);
-    } else {
-      setErrors(errors);
-      console.log(errors);
+    if (Object.keys(duplicateWarnings).length > 0) {
+      setDuplicateWarnings(duplicateWarnings);
     }
-  };
 
-  const handleNextClick = () => {
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+    }
+
+    if (
+      Object.keys(errors).length === 0 &&
+      Object.keys(duplicateWarnings).length === 0
+    ) {
+      setIsValid(true);
+    }
+  }, [text, setParsedData, setErrors, setDuplicateWarnings, setIsValid]);
+
+  const recreatedInputFromParsedData = (data: ParsedResult[]) =>
+    data
+      .map((result) => {
+        return `${result.address} ${result.amount}`;
+      })
+      .join("\n");
+
+  const onSubmit = useCallback(() => {
     processUserInput();
-  };
+  }, [processUserInput]);
+
+  const onHandleKeepFirstOne = useCallback(() => {
+    setText(recreatedInputFromParsedData(keepFirstOne(parsedData)));
+    processUserInput();
+  }, [parsedData, processUserInput]);
+
+  const onHandleCombineBalances = useCallback(() => {
+    setText(recreatedInputFromParsedData(combineBalances(parsedData)));
+    processUserInput();
+  }, [parsedData, processUserInput]);
 
   return (
     <div>
       <ReactEditor code={text} setCode={setText} />
-      <button onClick={handleNextClick}>Next</button>
+      {duplicateWarnings && (
+        <div>
+          <h2>Duplicate Address Warnings:</h2>
+          <button onClick={onHandleKeepFirstOne}>Keep First One</button>
+          <button onClick={onHandleCombineBalances}>Combine Balance</button>
+          {Object.entries(duplicateWarnings).map(([address, lineNumbers]) => (
+            <p key={address}>
+              Address {address} encountered duplicate in line:{" "}
+              {lineNumbers.join(", ")}
+            </p>
+          ))}
+        </div>
+      )}
+      <button onClick={onSubmit}>Next</button>
 
-      {Object.keys(errors).length > 0 && (
+      {errors && Object.keys(errors).length > 0 && (
         <div>
           <h2>Errors:</h2>
           {Object.entries(errors).map(([line, errorList]) => (
@@ -55,14 +99,14 @@ export const Home = () => {
         </div>
       )}
 
-      {Object.keys(errors).length === 0 && (
+      {isValid && (
         <div>
           <h2>Parsed Results:</h2>
-          {parsedResults.map((result) => {
+          {parsedData.map((result) => {
             console.log("Rendering result:", result);
             return (
-              <div key={result.line_number}>
-                Line {result.line_number}: Address {result.address} with amount{" "}
+              <div key={result.lineNumber}>
+                Line {result.lineNumber}: Address {result.address} with amount{" "}
                 {result.amount}
               </div>
             );
