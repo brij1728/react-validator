@@ -1,12 +1,12 @@
 import "./App.css";
 
-import { ReactEditor } from "./components";
+import { Home } from "./pages";
 
 function App() {
   return (
     <div className="App">
-      <div>React App</div>
-      <ReactEditor />
+      <div>Validator App</div>
+      <Home />
     </div>
   );
 }

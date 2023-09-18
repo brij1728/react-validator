@@ -1,14 +1,15 @@
 import "prismjs/themes/prism.css";
 
-import React, { useState } from "react";
-
 import Editor from "react-simple-code-editor";
 // Importing the bundled version
 import Prism from "prismjs";
 
-export const ReactEditor: React.FC = () => {
-  const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
+interface ReactEditorProps {
+  code: string;
+  setCode: React.Dispatch<React.SetStateAction<string>>;
+}
 
+export const ReactEditor: React.FC<ReactEditorProps> = ({ code, setCode }) => {
   const handleHighlight = (code: string) => {
     return Prism.highlight(code, Prism.languages.javascript, "javascript");
   };
@@ -16,7 +17,7 @@ export const ReactEditor: React.FC = () => {
   return (
     <Editor
       value={code}
-      onValueChange={setCode}
+      onValueChange={(code) => setCode(code)}
       highlight={handleHighlight}
       padding={10}
       style={{
