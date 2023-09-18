@@ -7,7 +7,7 @@ export const parseAddresses = (
   errors: ErrorResult;
 } => {
   const addressPattern = /(0x[a-fA-F0-9]{40})/;
-  const amountPattern = /([\d.]+)/;
+  const amountPattern = /(\d+\.\d+)/;
   const lines = input.split("\n").filter((line) => line.trim() !== ""); // Ignore empty lines
 
   const parsedResults: ParsedResult[] = [];
@@ -15,11 +15,14 @@ export const parseAddresses = (
 
   lines.forEach((line, idx) => {
     const lineNumber = idx + 1;
-    console.log(`Processing line ${lineNumber}: ${line}`);
+
     let hasError = false;
 
     const addressMatch = addressPattern.exec(line);
     const amountMatch = amountPattern.exec(line);
+
+    console.log(`addressMatch: ${addressMatch}`);
+    console.log(`amountMatch: ${amountMatch}`);
 
     if (!addressMatch) {
       if (!errorResults[lineNumber]) {
@@ -46,6 +49,7 @@ export const parseAddresses = (
     }
   });
 
+  console.log(parsedResults);
   return {
     parsed: parsedResults,
     errors: errorResults,
