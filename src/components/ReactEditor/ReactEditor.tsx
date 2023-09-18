@@ -1,7 +1,8 @@
+import "./styles.css";
+
 import "prismjs/themes/prism.css";
 
 import Editor from "react-simple-code-editor";
-// Importing the bundled version
 import Prism from "prismjs";
 
 interface ReactEditorProps {
@@ -11,7 +12,13 @@ interface ReactEditorProps {
 
 export const ReactEditor: React.FC<ReactEditorProps> = ({ code, setCode }) => {
   const handleHighlight = (code: string) => {
-    return Prism.highlight(code, Prism.languages.javascript, "javascript");
+    return Prism.highlight(code, Prism.languages.javascript, "javascript")
+      .split("\n")
+      .map(
+        (line: string, i: number) =>
+          `<span class='editorLineNumber'>${i + 1}</span>${line}`
+      )
+      .join("\n");
   };
 
   return (
@@ -20,10 +27,10 @@ export const ReactEditor: React.FC<ReactEditorProps> = ({ code, setCode }) => {
       onValueChange={(code) => setCode(code)}
       highlight={handleHighlight}
       padding={10}
+      textareaId="codeArea"
+      className="editor"
       style={{
         fontFamily: '"Fira code", "Fira Mono", monospace',
-        fontSize: 12,
-        backgroundColor: "#f5f2f0",
       }}
     />
   );
