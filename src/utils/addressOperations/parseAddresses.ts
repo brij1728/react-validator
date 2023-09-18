@@ -9,11 +9,13 @@ export const parseAddresses = (
   const addressPattern = /(0x[a-fA-F0-9]{40})/i; // Made it case-insensitive
   const amountPattern = /(\b\d+(\.\d+)?\b)/g;
 
-  const lines = input.split("\n").filter((line) => line.trim() !== "");
+  const lines = input.split("\n");
   const parsedResults: ParsedResult[] = [];
   const errorResults: ErrorResult = {};
 
   lines.forEach((line, idx) => {
+    if (!line.trim()) return;
+
     const lineNumber = idx + 1;
     const addressMatch = addressPattern.exec(line);
     const amountMatches = Array.from(line.matchAll(amountPattern));

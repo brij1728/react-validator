@@ -6,9 +6,9 @@ import { useState } from "react";
 
 export const Home = () => {
   const sampleInput = `
-    0x1234567890123456789012345678901234567890 123.45
-    0xabcdefabcdefabcdefabcdefabcdefabcdefabcdef00 99
-    `;
+0x1234567890123456789012345678901234567890 123.45
+0xabcdefabcdefabcdefabcdefabcdefabcdefabcdef00 99
+`.trim();
 
   const [codeValue, setCodeValue] = useState(sampleInput);
   const [parsedResults, setParsedResults] = useState<ParsedResult[]>([]);
