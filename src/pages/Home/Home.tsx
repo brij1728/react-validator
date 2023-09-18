@@ -10,12 +10,16 @@ export const Home = () => {
 0xabcdefabcdefabcdefabcdefabcdefabcdefabcdef00 99
 `.trim();
 
-  const [codeValue, setCodeValue] = useState(sampleInput);
+  const [text, setText] = useState(sampleInput);
   const [parsedResults, setParsedResults] = useState<ParsedResult[]>([]);
   const [errors, setErrors] = useState<ErrorResult>({});
 
   const processUserInput = () => {
-    const { parsed, errors } = parseAddresses(codeValue);
+    // reset state
+    setParsedResults([]);
+    setErrors({});
+
+    const { parsed, errors } = parseAddresses(text);
 
     if (Object.keys(errors).length === 0) {
       // If there are duplicate addresses, first combine their balances
@@ -27,6 +31,7 @@ export const Home = () => {
       setParsedResults(deduplicatedResults);
     } else {
       setErrors(errors);
+      console.log(errors);
     }
   };
 
@@ -36,7 +41,7 @@ export const Home = () => {
 
   return (
     <div>
-      <ReactEditor code={codeValue} setCode={setCodeValue} />
+      <ReactEditor code={text} setCode={setText} />
       <button onClick={handleNextClick}>Next</button>
 
       {Object.keys(errors).length > 0 && (

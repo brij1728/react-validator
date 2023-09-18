@@ -6,47 +6,42 @@ export const parseAddresses = (
   parsed: ParsedResult[];
   errors: ErrorResult;
 } => {
-  const addressPattern = /(0x[a-fA-F0-9]{40})/i; // Made it case-insensitive
-  const amountPattern = /(\b\d+(\.\d+)?\b)/g;
+  const linePattern = /^(0x[a-f0-9]{40})(?:\s*[,=]\s*|\s+)(\d+(\.\d+)?)$/i;
+  const addressPattern = /^0x[a-f0-9]{40}/i;
+  const amountPattern = /\d+(\.\d+)?$/;
 
   const lines = input.split("\n");
   const parsedResults: ParsedResult[] = [];
   const errorResults: ErrorResult = {};
 
   lines.forEach((line, idx) => {
-    if (!line.trim()) return;
+    const trimmedLine = line.trim();
+    if (!trimmedLine) return;
 
     const lineNumber = idx + 1;
-    const addressMatch = addressPattern.exec(line);
-    const amountMatches = Array.from(line.matchAll(amountPattern));
-    const amountMatch = amountMatches.length
-      ? amountMatches[amountMatches.length - 1]
-      : null;
-
-    // If neither an address nor an amount is found, log both errors
-    if (!addressMatch && !amountMatch) {
-      errorResults[lineNumber] = ["wrong address", "wrong amount"];
-      return;
-    }
-
-    // Check for missing address
-    if (!addressMatch) {
-      errorResults[lineNumber] = errorResults[lineNumber] || [];
-      errorResults[lineNumber].push("wrong address");
-    }
-
-    // Check for missing amount
-    if (!amountMatch) {
-      errorResults[lineNumber] = errorResults[lineNumber] || [];
-      errorResults[lineNumber].push("wrong amount");
-    }
-
-    if (addressMatch && amountMatch) {
+    const match = linePattern.exec(trimmedLine);
+    if (match) {
       parsedResults.push({
         line_number: lineNumber,
-        address: addressMatch[1],
-        amount: amountMatch[1],
+        address: match[1],
+        amount: parseFloat(match[2]),
       });
+    } else {
+      errorResults[lineNumber] = [];
+
+      if (!addressPattern.test(trimmedLine)) {
+        errorResults[lineNumber].push("invalid address");
+      }
+
+      if (!amountPattern.test(trimmedLine)) {
+        errorResults[lineNumber].push("invalid amount");
+      }
+
+      if (errorResults[lineNumber].length === 0) {
+        errorResults[lineNumber].push(
+          "We are expecting a valid address and a valid amount separated by comma, space or ="
+        );
+      }
     }
   });
 

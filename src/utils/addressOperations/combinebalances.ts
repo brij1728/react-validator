@@ -10,11 +10,11 @@ export const combineBalances = (
   for (const entry of parsedResults) {
     if (!combinedResults[entry.address]) {
       combinedResults[entry.address] = {
-        amount: parseFloat(entry.amount),
+        amount: entry.amount,
         line: entry.line_number,
       };
     } else {
-      combinedResults[entry.address].amount += parseFloat(entry.amount);
+      combinedResults[entry.address].amount += entry.amount;
     }
   }
 
@@ -23,7 +23,7 @@ export const combineBalances = (
     results.push({
       line_number: details.line,
       address: address,
-      amount: details.amount.toString(),
+      amount: details.amount,
     });
   }
 
