@@ -1,9 +1,8 @@
 import "./styles.css";
-
 import "prismjs/themes/prism.css";
 
-import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
+import Editor from "react-simple-code-editor";
 
 interface ReactEditorProps {
   code: string;
@@ -30,7 +29,7 @@ export const ReactEditor: React.FC<ReactEditorProps> = ({
     <>
       <Editor
         value={code}
-        onValueChange={(code) => setCode(code)}
+        onValueChange={setCode}
         highlight={handleHighlight}
         padding={10}
         textareaId="codeArea"

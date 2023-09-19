@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { ParsedResults } from "./ParsedResults";
+
 import { ParsedResult } from "../../types";
+import { ParsedResults } from "./ParsedResults";
 
 describe("ParsedResults", () => {
   it("renders the list of parsed results correctly", () => {

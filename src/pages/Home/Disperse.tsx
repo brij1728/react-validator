@@ -1,3 +1,12 @@
+import { useState } from "react";
+
+import {
+  DuplicateWarning,
+  ErrorList,
+  ParsedResults,
+  ReactEditor,
+} from "../../components";
+import { useParsedData } from "../../hooks";
 import {
   ButtonContainer,
   StyledButton,
@@ -6,15 +15,6 @@ import {
   StyledResultContainer,
   StyledWarningContainer,
 } from "./DisperseStyles";
-import {
-  DuplicateWarning,
-  ErrorList,
-  ParsedResults,
-  ReactEditor,
-} from "../../components";
-
-import { useParsedData } from "../../hooks";
-import { useState } from "react";
 
 export const Home = () => {
   const sampleInput = `
