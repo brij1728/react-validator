@@ -1,4 +1,12 @@
 import {
+  ButtonContainer,
+  StyledButton,
+  StyledContainer,
+  StyledErrorContainer,
+  StyledResultContainer,
+  StyledWarningContainer,
+} from "./HomeStyles";
+import {
   DuplicateWarning,
   ErrorList,
   ParsedResults,
@@ -14,7 +22,7 @@ export const Home = () => {
 0xabcdefabcdefabcdefabcdefabcdefabcdffff00 99
 `.trim();
 
-  const [isEditing, setIsEditing] = useState(true);
+  const [showParsedResults, setShowParsedResults] = useState(false);
 
   const {
     text,
@@ -27,34 +35,43 @@ export const Home = () => {
     onSubmit,
     onHandleKeepFirstOne,
     onHandleCombineBalances,
-  } = useParsedData(sampleInput, () => setIsEditing(false));
+  } = useParsedData(sampleInput, () => setShowParsedResults(true));
 
   return (
-    <div>
+    <StyledContainer>
       <ReactEditor
         code={text}
         setCode={(newText) => {
           setText(newText);
-          setIsEditing(true);
           resetState();
+          setShowParsedResults(false);
         }}
       />
 
-      {isEditing && <button onClick={onSubmit}>Next</button>}
+      {errors && Object.keys(errors).length > 0 && (
+        <StyledErrorContainer>
+          <ErrorList errors={errors} />
+        </StyledErrorContainer>
+      )}
 
       {duplicateWarnings && Object.keys(duplicateWarnings).length > 0 && (
-        <DuplicateWarning
-          warnings={duplicateWarnings}
-          onKeepFirstOne={onHandleKeepFirstOne}
-          onCombineBalances={onHandleCombineBalances}
-        />
+        <StyledWarningContainer>
+          <DuplicateWarning
+            warnings={duplicateWarnings}
+            onKeepFirstOne={onHandleKeepFirstOne}
+            onCombineBalances={onHandleCombineBalances}
+          />
+        </StyledWarningContainer>
       )}
 
-      {errors && Object.keys(errors).length > 0 && (
-        <ErrorList errors={errors} />
+      {showParsedResults && isValid && (
+        <StyledResultContainer>
+          <ParsedResults results={parsedData} />
+        </StyledResultContainer>
       )}
-
-      {isValid && <ParsedResults results={parsedData} />}
-    </div>
+      <ButtonContainer>
+        <StyledButton onClick={onSubmit}>Next</StyledButton>
+      </ButtonContainer>
+    </StyledContainer>
   );
 };

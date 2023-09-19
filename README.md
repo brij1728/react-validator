@@ -20,3 +20,4 @@ npm install react-simple-code-editor
 npm i prismjs
 npm i @types/prismjs
 npm i --save-dev @types/prismjs
+npm install styled-components
