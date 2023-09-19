@@ -1,1 +1,1 @@
-export * from "./ParseResult";
+export * from "./ParsedResults";
