@@ -50,4 +50,11 @@ export const StyledButton = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+
+  &.valid {
+    background-color: #28a745;
+    &:hover {
+      background-color: #1e7e34;
+    }
+  }
 `;

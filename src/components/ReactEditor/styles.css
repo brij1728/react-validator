@@ -1,6 +1,7 @@
 .editor {
   counter-reset: line;
   border: 1px solid #ced4da;
+  background-color: #f8feff;
 }
 
 .editor #codeArea {
@@ -18,4 +19,13 @@
   text-align: right;
   width: 40px;
   font-weight: 100;
+}
+
+.hint {
+  text-align: left;
+  color: #a2a7ac;
+  margin: 0;
+  padding: 0;
+  margin-top: 5px;
+  font-style: italic;
 }

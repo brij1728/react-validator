@@ -9,8 +9,7 @@ export const ParsedResults: React.FC<Props> = ({ results }) => (
     <h2>Parsed Results:</h2>
     {results.map((result) => (
       <div key={result.lineNumber}>
-        Line {result.lineNumber}: Address {result.address} with amount{" "}
-        {result.amount}
+        Send {result.amount} to address {result.address}
       </div>
     ))}
   </div>

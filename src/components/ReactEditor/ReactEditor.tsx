@@ -8,9 +8,14 @@ import Prism from "prismjs";
 interface ReactEditorProps {
   code: string;
   setCode: React.Dispatch<React.SetStateAction<string>>;
+  hint?: string;
 }
 
-export const ReactEditor: React.FC<ReactEditorProps> = ({ code, setCode }) => {
+export const ReactEditor: React.FC<ReactEditorProps> = ({
+  code,
+  setCode,
+  hint,
+}) => {
   const handleHighlight = (code: string) => {
     return Prism.highlight(code, Prism.languages.javascript, "javascript")
       .split("\n")
@@ -22,16 +27,19 @@ export const ReactEditor: React.FC<ReactEditorProps> = ({ code, setCode }) => {
   };
 
   return (
-    <Editor
-      value={code}
-      onValueChange={(code) => setCode(code)}
-      highlight={handleHighlight}
-      padding={10}
-      textareaId="codeArea"
-      className="editor"
-      style={{
-        fontFamily: '"Fira code", "Fira Mono", monospace',
-      }}
-    />
+    <>
+      <Editor
+        value={code}
+        onValueChange={(code) => setCode(code)}
+        highlight={handleHighlight}
+        padding={10}
+        textareaId="codeArea"
+        className="editor"
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+        }}
+      />
+      {hint?.trim() && <p className="hint">{hint}</p>}
+    </>
   );
 };

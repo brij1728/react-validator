@@ -46,6 +46,7 @@ export const Home = () => {
           resetState();
           setShowParsedResults(false);
         }}
+        hint="Separated by ',' or ' ' or '='"
       />
 
       {errors && Object.keys(errors).length > 0 && (
@@ -70,7 +71,9 @@ export const Home = () => {
         </StyledResultContainer>
       )}
       <ButtonContainer>
-        <StyledButton onClick={onSubmit}>Next</StyledButton>
+        <StyledButton onClick={onSubmit} className={`${isValid && "valid"}`}>
+          Next
+        </StyledButton>
       </ButtonContainer>
     </StyledContainer>
   );
