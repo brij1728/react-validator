@@ -5,7 +5,7 @@ import {
   StyledErrorContainer,
   StyledResultContainer,
   StyledWarningContainer,
-} from "./HomeStyles";
+} from "./DisperseStyles";
 import {
   DuplicateWarning,
   ErrorList,
