@@ -1,3 +1,14 @@
+import {
+  AddressContainer,
+  AddressList,
+  AddressListContainer,
+  Button,
+  ButtonGroup,
+  ErrorIcon,
+  Header,
+  WarningContainer,
+} from "./DuplicateWarningStyles";
+
 import { DuplicateAddressWarning } from "../../types";
 
 interface Props {
@@ -11,15 +22,24 @@ export const DuplicateWarning: React.FC<Props> = ({
   onKeepFirstOne,
   onCombineBalances,
 }) => (
-  <div>
-    <h2>Duplicate Address Warnings:</h2>
-    <button onClick={onKeepFirstOne}>Keep First One</button>
-    <button onClick={onCombineBalances}>Combine Balance</button>
-    {Object.entries(warnings).map(([address, lineNumbers]) => (
-      <p key={address}>
-        Address {address} encountered duplicate in line:{" "}
-        {lineNumbers.join(", ")}
-      </p>
-    ))}
-  </div>
+  <WarningContainer>
+    <Header>
+      <p>Duplicate</p>
+      <ButtonGroup>
+        <Button onClick={onKeepFirstOne}>Keep First One</Button>
+        <Button onClick={onCombineBalances}>Combine Balance</Button>
+      </ButtonGroup>
+    </Header>
+    <AddressContainer>
+      <ErrorIcon>!</ErrorIcon>
+      <AddressListContainer>
+        {Object.entries(warnings).map(([address, lineNumbers]) => (
+          <AddressList key={address}>
+            Address {address} encountered duplicate in line:{" "}
+            {lineNumbers.join(", ")}
+          </AddressList>
+        ))}
+      </AddressListContainer>
+    </AddressContainer>
+  </WarningContainer>
 );

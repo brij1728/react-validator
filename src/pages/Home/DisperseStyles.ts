@@ -12,15 +12,15 @@ export const StyledContainer = styled.div`
 export const StyledWarningContainer = styled.div`
   margin-top: 20px;
   padding: 15px;
-  background-color: #ffffdd;
-  border: 1px solid #ffff88;
+  background-color: #fff;
+  border: 1px solid #ff8888;
   border-radius: 5px;
 `;
 
 export const StyledErrorContainer = styled.div`
   margin-top: 20px;
   padding: 15px;
-  background-color: #ffdddd;
+  background-color: #fff;
   border: 1px solid #ff8888;
   border-radius: 5px;
 `;
