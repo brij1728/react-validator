@@ -11,7 +11,7 @@ describe("useParsedData", () => {
 
   it("parses the provided text on submit and identifies valid data", () => {
     const { result } = renderHook(() =>
-      useParsedData("0x1234567890123456789012345678901234567890, 100.5")
+      useParsedData("0x1234567890123456789012345678901234567890, 100.5"),
     );
 
     act(() => {
@@ -30,7 +30,7 @@ describe("useParsedData", () => {
 
   it("identifies errors on invalid data", () => {
     const { result } = renderHook(() =>
-      useParsedData("0xInvalidAddress, 100.5")
+      useParsedData("0xInvalidAddress, 100.5"),
     );
 
     act(() => {
@@ -55,7 +55,7 @@ describe("useParsedData", () => {
       expect(
         result.current.duplicateWarnings[
           "0x1234567890123456789012345678901234567890"
-        ]
+        ],
       ).toEqual([1, 2]);
     }
   });
