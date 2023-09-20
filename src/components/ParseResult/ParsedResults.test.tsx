@@ -15,10 +15,10 @@ describe("ParsedResults", () => {
     // Check if the component renders the correct elements and text
     expect(screen.getByText("Parsed Results:")).toBeInTheDocument();
     expect(
-      screen.getByText("Send 100 to address address1")
+      screen.getByText("Send 100 to address address1"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Send 200 to address address2")
+      screen.getByText("Send 200 to address address2"),
     ).toBeInTheDocument();
   });
 

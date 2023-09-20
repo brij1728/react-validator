@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 
 export const useParsedData = (
   initialValue: string,
-  onProcessedCallback?: () => void
+  onProcessedCallback?: () => void,
 ) => {
   const [text, setText] = useState(initialValue);
   const [parsedData, setParsedData] = useState<ParsedResult[]>([]);

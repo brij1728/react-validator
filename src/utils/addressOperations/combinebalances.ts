@@ -1,7 +1,7 @@
 import { ParsedResult } from "../../types";
 
 export const combineBalances = (
-  parsedResults: ParsedResult[]
+  parsedResults: ParsedResult[],
 ): ParsedResult[] => {
   const combinedResults: {
     [address: string]: { amount: number; line: number };

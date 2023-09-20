@@ -11,7 +11,7 @@ describe("useParsedData", () => {
 
   it("parses the provided text on submit and identifies valid data", () => {
     const { result } = renderHook(() =>
-      useParsedData("0x1234567890123456789012345678901234567890, 100.5"),
+      useParsedData("0x1234567890123456789012345678901234567890, 100.5")
     );
 
     act(() => {
@@ -30,7 +30,7 @@ describe("useParsedData", () => {
 
   it("identifies errors on invalid data", () => {
     const { result } = renderHook(() =>
-      useParsedData("0xInvalidAddress, 100.5"),
+      useParsedData("0xInvalidAddress, 100.5")
     );
 
     act(() => {
@@ -44,10 +44,8 @@ describe("useParsedData", () => {
   });
 
   it("identifies duplicate address warnings", () => {
-    const input = `
-      0x1234567890123456789012345678901234567890, 100.5
-      0x1234567890123456789012345678901234567890, 200.5
-    `;
+    const input = `0x1234567890123456789012345678901234567890, 100.5
+      0x1234567890123456789012345678901234567890, 200.5`;
     const { result } = renderHook(() => useParsedData(input));
 
     act(() => {
@@ -57,7 +55,7 @@ describe("useParsedData", () => {
       expect(
         result.current.duplicateWarnings[
           "0x1234567890123456789012345678901234567890"
-        ],
+        ]
       ).toEqual([1, 2]);
     }
   });
@@ -72,9 +70,6 @@ describe("useParsedData", () => {
     act(() => {
       result.current.onHandleKeepFirstOne();
     });
-
-    // Check if deduplication has taken place
-    // ... (based on how your deduplication function works)
   });
 
   it("handles the onHandleCombineBalances method correctly", () => {
@@ -93,7 +88,6 @@ describe("useParsedData", () => {
     const input = "0x1234567890123456789012345678901234567890, 100.5";
     const { result } = renderHook(() => useParsedData(input));
 
-    // Assuming there was some initial state before resetting
     act(() => {
       result.current.onSubmit();
     });

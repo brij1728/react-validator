@@ -5,7 +5,7 @@ import {
 } from "../../types";
 
 export const parseAddresses = (
-  input: string
+  input: string,
 ): {
   parsed: ParsedResult[];
   errors: ErrorResult;
@@ -53,7 +53,7 @@ export const parseAddresses = (
 
       if (errorResults[lineNumber].length === 0) {
         errorResults[lineNumber].push(
-          "We are expecting a valid address and a valid amount separated by comma, space or ="
+          "We are expecting a valid address and a valid amount separated by comma, space or =",
         );
       }
     }
